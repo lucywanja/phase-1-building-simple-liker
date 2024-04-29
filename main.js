@@ -4,36 +4,37 @@ const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
 // selects all elements with the class "like-glyph" and stores them in the getHearts variable.
-const getHearts = document.querySelectorAll(".like-glyph");;
+const getHearts = document.querySelectorAll(".like-glyph");
 //console.log(document.querySelectorAll(".like-glyph"));
+
+const error = document.querySelector('.hidden');
+//console.log(document.querySelector('.hidden'));
+
+getHearts.forEach( heart => heart.addEventListener("click", serverResponse ));
 
 
 // This function is executed when a heart is clicked. It toggles the heart between empty and full states, changes the color, and handles any errors.
-function likeCallBack(e) {
-  const heart = e.target;// this e.target refers to the heart icon element which is triggered.
+function serverResponse(getHearts) {
   mimicServerCall()
-  .then(function(){
-    if(heart.innerText === EMPTY_HEART) {
-      heart.innerText = FULL_HEART;//sets the inner text of the heart icon (heart) to the FULL_HEART constant, effectively filling the heart.
-      heart.className = "activated-heart";//adding a class to indicate the haert has been activated or filled
-    }else{
-      heart.innerText = EMPTY_HEART;
-      heart.className = "";//it resets the stylying to its default state
+  .then(() => {
+    if(getHearts.target.textContent === EMPTY_HEART){
+      getHearts.target.textContent = FULL_HEART;
+      getHearts.target.classList.add("activated-heart")
+    }else if (getHearts.target.textContent === FULL_HEART){
+      getHearts.target.textContent = EMPTY_HEART;
     }
-
   })
-  .catch(function(error) {
-    const modal = document.getElementById("modal");
-    modal.className = "";
-    modal.innerText = error;
-    setTimeout(() => modal.className = "hidden", 3000);
+  .catch(() => {
+    error.classList.remove("#hidden")
+    error.textContent = "error occurred"
 
-  });
-}
-// for of 
-for (const glyph of getHearts) {
-  glyph.addEventListener("click", likeCallBack);
-}
+    setTimeout(() => {
+      error.classList = "hidden"}, 3000)
+    })
+  }
+
+
+
 //------------------------------------------------------------------------------
 // Don't change the code below: this function mocks the server response
 //------------------------------------------------------------------------------
